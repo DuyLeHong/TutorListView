@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,16 +33,24 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == RESULT_OK) {
+                    if (result.getResultCode() == ActivityAddOrEditSV.MODE_THEM_SV) {
                         Intent data = result.getData();
 
                         StudentModel svModel = (StudentModel) data.getSerializableExtra("sv");
                         arrSv.add(svModel);
                         adapterSV.notifyDataSetChanged();
 
+                    } else if (result.getResultCode() == ActivityAddOrEditSV.MODE_SUA_SV) {
+                        Intent data = result.getData();
+
+                        StudentModel svModel = (StudentModel) data.getSerializableExtra("sv");
+                        arrSv.set(indexSVEdit, svModel);
+                        adapterSV.notifyDataSetChanged();
                     }
                 }
             });
+
+    private int indexSVEdit = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,29 +58,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button btnAddSV = findViewById(R.id.btn_add_sv);
-        Button btnEditSV = findViewById(R.id.btn_sua_sv);
 
         btnAddSV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ActivityAddOrEditSV.class);
 
-                intent.putExtra(KEY_MODE_LAYOUT,  true);
+                intent.putExtra(KEY_MODE_LAYOUT, true);
 
                 getData.launch(intent);
             }
         });
 
-        btnEditSV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ActivityAddOrEditSV.class);
-
-                intent.putExtra(KEY_MODE_LAYOUT,  false);
-
-                startActivity(intent);
-            }
-        });
+//        btnEditSV.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(), ActivityAddOrEditSV.class);
+//
+//                intent.putExtra(KEY_MODE_LAYOUT,  false);
+//
+//                startActivity(intent);
+//            }
+//        });
 
         ListView lvStudent = findViewById(R.id.lv_student);
         arrSv.add(new StudentModel("Nguyễn Văn Long", "PH11311", R.mipmap.ava2));
@@ -80,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
         adapterSV = new AdapterSV(this, arrSv);
 
         lvStudent.setAdapter(adapterSV);
+
+//        lvStudent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Toast.makeText(MainActivity.this, arrSv.get(i).getsName(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     private class AdapterSV extends BaseAdapter {
@@ -87,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity activity;
         ArrayList<StudentModel> list;
 
-        public AdapterSV (MainActivity activity, ArrayList<StudentModel> list) {
+        public AdapterSV(MainActivity activity, ArrayList<StudentModel> list) {
             this.activity = activity;
             this.list = list;
         }
@@ -126,6 +142,23 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     arrSv.remove(i);
                     notifyDataSetChanged();
+                }
+            });
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    indexSVEdit = i;
+
+                    Intent intent = new Intent(getApplicationContext(), ActivityAddOrEditSV.class);
+
+                    intent.putExtra(KEY_MODE_LAYOUT, false);
+                    intent.putExtra("sv", arrSv.get(i));
+
+                    getData.launch(intent);
+
+                    //startActivity(intent);
                 }
             });
 

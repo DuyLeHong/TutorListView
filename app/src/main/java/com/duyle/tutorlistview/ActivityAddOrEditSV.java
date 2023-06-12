@@ -11,6 +11,11 @@ import android.widget.TextView;
 
 public class ActivityAddOrEditSV extends AppCompatActivity {
 
+    boolean isAddSv;
+
+    public static final int MODE_THEM_SV = 1;
+    public static final int MODE_SUA_SV = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,17 +23,24 @@ public class ActivityAddOrEditSV extends AppCompatActivity {
 
         TextView tvTitle = findViewById(R.id.tv_title);
 
-        boolean isAddSv = getIntent().getBooleanExtra(MainActivity.KEY_MODE_LAYOUT, false);
+        EditText edtTen = findViewById(R.id.edt_name);
+        EditText edtMssv = findViewById(R.id.edt_mssv);
+
+        isAddSv = getIntent().getBooleanExtra(MainActivity.KEY_MODE_LAYOUT, false);
         if (isAddSv) {
             tvTitle.setText("Thêm SV");
         } else {
             tvTitle.setText("Sửa SV");
+
+            StudentModel svModel = (StudentModel) getIntent().getSerializableExtra("sv");
+            edtTen.setText(svModel.getsName());
+            edtMssv.setText(svModel.getMssv());
+
         }
 
         Button btnSave = findViewById(R.id.btn_save);
 
-        EditText edtTen = findViewById(R.id.edt_name);
-        EditText edtMssv = findViewById(R.id.edt_mssv);
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +53,12 @@ public class ActivityAddOrEditSV extends AppCompatActivity {
                 Intent data = new Intent();
                 data.putExtra("sv", svModel);
 
-                setResult(RESULT_OK, data);
+                if (isAddSv) {
+                    setResult(MODE_THEM_SV, data);
+                } else {
+                    setResult(MODE_SUA_SV, data);
+                }
+
 
                 finish();
             }

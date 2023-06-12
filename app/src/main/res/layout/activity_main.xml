@@ -8,11 +8,20 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Quan ly Sinh vien"
         android:textSize="25sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thêm SV"
+        android:id="@+id/btn_add_sv"
+        android:layout_marginRight="10dp"/>
 
     <ListView
         android:id="@+id/lv_student"
@@ -26,12 +35,7 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thêm SV"
-            android:id="@+id/btn_add_sv"
-            android:layout_marginRight="10dp"/>
+
 
 <!--        <Button-->
 <!--            android:layout_width="wrap_content"-->
@@ -40,12 +44,12 @@
 <!--            android:id="@+id/btn_xoa_sv"-->
 <!--            android:layout_marginRight="10dp"/>-->
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sửa SV"
-            android:id="@+id/btn_sua_sv"
-            android:layout_marginRight="10dp"/>
+<!--        <Button-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Sửa SV"-->
+<!--            android:id="@+id/btn_sua_sv"-->
+<!--            android:layout_marginRight="10dp"/>-->
 
     </LinearLayout>
 
