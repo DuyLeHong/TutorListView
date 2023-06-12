@@ -1,5 +1,9 @@
 package com.duyle.tutorlistview;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -22,13 +26,28 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String KEY_MODE_LAYOUT = "add_sv";
 
+    ActivityResultLauncher<Intent> getData = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+
+                        StudentModel svModel = (StudentModel) data.getSerializableExtra("sv");
+                        arrSv.add(svModel);
+                        adapterSV.notifyDataSetChanged();
+
+                    }
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Button btnAddSV = findViewById(R.id.btn_add_sv);
-        Button btnRemoveSV = findViewById(R.id.btn_xoa_sv);
         Button btnEditSV = findViewById(R.id.btn_sua_sv);
 
         btnAddSV.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
                 intent.putExtra(KEY_MODE_LAYOUT,  true);
 
-                startActivity(intent);
+                getData.launch(intent);
             }
         });
 
@@ -99,6 +118,16 @@ public class MainActivity extends AppCompatActivity {
             ImageView ivAvatar = view.findViewById(R.id.iv_avatar);
             TextView tvName = view.findViewById(R.id.tv_name);
             TextView tvMssv = view.findViewById(R.id.tv_mssv);
+
+            Button btnXoa = view.findViewById(R.id.btn_xoa);
+
+            btnXoa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    arrSv.remove(i);
+                    notifyDataSetChanged();
+                }
+            });
 
             ivAvatar.setImageResource(svModel.getIconId());
             tvName.setText(svModel.getsName());

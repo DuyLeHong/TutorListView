@@ -33,12 +33,12 @@
             android:id="@+id/btn_add_sv"
             android:layout_marginRight="10dp"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Xóa SV"
-            android:id="@+id/btn_xoa_sv"
-            android:layout_marginRight="10dp"/>
+<!--        <Button-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Xóa SV"-->
+<!--            android:id="@+id/btn_xoa_sv"-->
+<!--            android:layout_marginRight="10dp"/>-->
 
         <Button
             android:layout_width="wrap_content"

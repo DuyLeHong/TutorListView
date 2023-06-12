@@ -2,9 +2,11 @@ package com.duyle.tutorlistview;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class ActivityAddOrEditSV extends AppCompatActivity {
@@ -24,9 +26,23 @@ public class ActivityAddOrEditSV extends AppCompatActivity {
         }
 
         Button btnSave = findViewById(R.id.btn_save);
+
+        EditText edtTen = findViewById(R.id.edt_name);
+        EditText edtMssv = findViewById(R.id.edt_mssv);
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String tenSV = edtTen.getText().toString();
+                String mssv = edtMssv.getText().toString();
+
+                StudentModel svModel = new StudentModel(tenSV, mssv, R.mipmap.ava2);
+                Intent data = new Intent();
+                data.putExtra("sv", svModel);
+
+                setResult(RESULT_OK, data);
+
                 finish();
             }
         });

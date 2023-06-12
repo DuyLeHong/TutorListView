@@ -1,6 +1,8 @@
 package com.duyle.tutorlistview;
 
-public class StudentModel {
+import java.io.Serializable;
+
+public class StudentModel implements Serializable {
 
     private String sName;
     private String mssv;
