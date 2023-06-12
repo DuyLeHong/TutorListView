@@ -19,6 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,17 +44,58 @@ public class MainActivity extends AppCompatActivity {
                         arrSv.add(svModel);
                         adapterSV.notifyDataSetChanged();
 
+                        luuDuLieu();
+
                     } else if (result.getResultCode() == ActivityAddOrEditSV.MODE_SUA_SV) {
                         Intent data = result.getData();
 
                         StudentModel svModel = (StudentModel) data.getSerializableExtra("sv");
                         arrSv.set(indexSVEdit, svModel);
                         adapterSV.notifyDataSetChanged();
+
+                        luuDuLieu();
                     }
                 }
             });
 
     private int indexSVEdit = -1;
+
+    String FILE_NAME = "sv.txt";
+    private void luuDuLieu () {
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(FILE_NAME, MODE_PRIVATE);
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            objectOutputStream.writeObject(arrSv);
+
+            objectOutputStream.close();
+            fileOutputStream.close();
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void docDulieu () {
+
+        try {
+            FileInputStream fileInputStream = openFileInput(FILE_NAME);
+
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            arrSv = (ArrayList<StudentModel>) objectInputStream.readObject();
+
+            objectInputStream.close();
+
+            fileInputStream.close();
+
+
+        } catch (Exception e) {
+
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +127,18 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         ListView lvStudent = findViewById(R.id.lv_student);
-        arrSv.add(new StudentModel("Nguyễn Văn Long", "PH11311", R.mipmap.ava2));
-        arrSv.add(new StudentModel("Trần Tuấn Anh", "PH14511", R.mipmap.ava3));
-        arrSv.add(new StudentModel("Lê Văn Minh", "PH116712", R.mipmap.ava4));
+
+        docDulieu();
+
+        if (arrSv.size() == 0) {
+
+            arrSv.add(new StudentModel("Nguyễn Văn Long", "PH11311", R.mipmap.ava2));
+            arrSv.add(new StudentModel("Trần Tuấn Anh", "PH14511", R.mipmap.ava3));
+            arrSv.add(new StudentModel("Lê Văn Minh", "PH116712", R.mipmap.ava4));
+
+        }
+
+
 
         adapterSV = new AdapterSV(this, arrSv);
 
@@ -142,6 +196,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     arrSv.remove(i);
                     notifyDataSetChanged();
+
+                    luuDuLieu();
                 }
             });
 
